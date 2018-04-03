@@ -33,9 +33,6 @@ public class Coffee : MonoBehaviour {
 
 	public void SetActive(bool active) {
 		gameObject.SetActive (active);
-		if (!active) {
-			spriteRenderer.color = Color.white;
-		}
 	}
 
 	public void SetComsumption(float level) {

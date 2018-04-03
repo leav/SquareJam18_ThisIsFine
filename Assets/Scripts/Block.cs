@@ -8,6 +8,11 @@ public class Block : MonoBehaviour
 	GameObject fire;
 	[SerializeField]
 	GameObject warning;
+	[SerializeField]
+	AudioSource fireSound;
+	[SerializeField]
+	SpriteRenderer spriteRenderer;
+	UnityEngine.Color pushedColor = new UnityEngine.Color(0, 0, 0, 66f / 255);
 
 	public enum ColorEnum
 	{
@@ -75,6 +80,9 @@ public class Block : MonoBehaviour
 			return _onFire;
 		}
 		set {
+			if (!_onFire && value) {
+				fireSound.Play ();
+			}
 			_onFire = value;
 			fire.SetActive (_onFire);
 		}
@@ -86,6 +94,21 @@ public class Block : MonoBehaviour
 		set { 
 			_onWarning = value;
 			warning.SetActive (_onWarning);
+		}
+	}
+
+	bool _pushed = false;
+	public bool Pushed {
+		get {return _pushed;}
+		set {
+			if (_pushed != value) {
+				if (value) {
+					spriteRenderer.color = pushedColor;
+				} else {
+					spriteRenderer.color = UnityEngine.Color.white;
+				}
+			}
+			_pushed = value;
 		}
 	}
 

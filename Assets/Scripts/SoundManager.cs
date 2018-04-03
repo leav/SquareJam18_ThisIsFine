@@ -11,6 +11,10 @@ public class SoundManager : MonoBehaviour {
 	AudioSource imminent;
 	[SerializeField]
 	AudioSource onFire;
+	[SerializeField]
+	AudioSource pickup;
+	[SerializeField]
+	AudioSource drop;
 
 	// Use this for initialization
 	void Start () {
@@ -39,5 +43,13 @@ public class SoundManager : MonoBehaviour {
 		peaceful.mute = false;
 		imminent.mute = true;
 		onFire.mute = false;
+	}
+
+	public void PlayPickup() {
+		pickup.Play ();
+	}
+
+	public void PlayDrop() {
+		drop.Play ();
 	}
 }

@@ -52,9 +52,9 @@ public class Controller : MonoBehaviour
 	int prepareBlockCount = 0;
 
 	int startingFeature = 1;
-	int minFeatureGenerationSize = 3;
+	int minFeatureGenerationSize = 2;
 	int maxFeatureGenerationSize = 4;
-	int maxFeatureSize = 6;
+	int maxFeatureSize = 5;
 	int featureInterval = 8;
 	int featureIntervalCount = 0;
 
@@ -69,9 +69,6 @@ public class Controller : MonoBehaviour
 	const int catchFireChance = 80;
 	const int maxNoFireCount = 10;
 	const int warningDuration = 4;
-
-	const float gameOverTextStartingY = -13;
-	const float gameOverTextEndingY = 0;
 
 	[SerializeField]
 	Coffee coffee;
@@ -118,7 +115,7 @@ public class Controller : MonoBehaviour
 		default:
 			throw(new Exception (string.Format ("unhandled state {0}", state)));
 		}
-
+		UpdateBlockPushedColor ();
 		UpdateTick ();
 	}
 
@@ -151,6 +148,7 @@ public class Controller : MonoBehaviour
 				begunBlock = block;
 				prepareArea.RemoveBlock (block);
 				board.AddBlock (block);
+				soundManager.PlayPickup ();
 				state = State.Begun;
 			} else if (coffee.IsMouseHit ()) {
 				state = State.CoffeeIntake;
@@ -162,6 +160,7 @@ public class Controller : MonoBehaviour
 		if (Input.GetMouseButtonUp (0)) {
 			state = State.Idle;
 			coffeeIntakeCount = 0;
+			coffee.SetComsumption (0);
 		}
 	}
 
@@ -189,6 +188,7 @@ public class Controller : MonoBehaviour
 		if (Input.GetMouseButtonUp (0)) {
 			if (board.WithinBoundary (begunBlock.DisplayX, begunBlock.DisplayY)) {
 				begunBlock.SetAllPosition (begunBlock.DisplayX, begunBlock.DisplayY);
+				soundManager.PlayDrop ();
 			} else {
 				board.RemoveBlock (begunBlock);
 				prepareArea.AddBlock (begunBlock);
@@ -272,6 +272,7 @@ public class Controller : MonoBehaviour
 					block.gameObject.SetActive (false);
 					Destroy (block.gameObject);
 				}
+				soundManager.PlayDrop ();
 			} else {
 				board.RemoveBlock (begunBlock);
 				prepareArea.AddBlock (begunBlock);
@@ -281,6 +282,18 @@ public class Controller : MonoBehaviour
 			}
 			begunBlock = null;
 			state = State.Idle;
+		}
+	}
+
+	void UpdateBlockPushedColor() {
+		foreach (var block in board.GetBlocks()) {
+			if (block != begunBlock) {
+				if (block.DisplayX != block.X || block.DisplayY != block.Y) {
+					block.Pushed = true;
+				} else {
+					block.Pushed = false;
+				}
+			}
 		}
 	}
 
@@ -451,6 +464,7 @@ public class Controller : MonoBehaviour
 			tadaSound.Play ();
 			coffeeUsedForThisFire = true;
 			coffee.SetActive(false);
+			coffee.SetComsumption (0);
 			coffeeLastEffect.SetActive (true);
 			state = State.Idle;
 		}

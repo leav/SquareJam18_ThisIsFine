@@ -102,7 +102,7 @@ public class Feature : MonoBehaviour {
 		return max - min + 1;
 	}
 
-	Color satisfiedColor = new Color(0, 161, 28);
+	Color satisfiedColor = new Color(0, 161f / 255, 28f / 255);
 	Color normalColor = Color.white;
 	public void MarkAsSatisfied() {
 		foreach (var block in blocks) {
