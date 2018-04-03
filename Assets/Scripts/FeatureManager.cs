@@ -10,86 +10,6 @@ public class FeatureManager : MonoBehaviour
 	Feature featurePrefab;
 	List<Feature> features = new List<Feature> ();
 
-	List<List<Vector2Int>> positionPresets = new List<List<Vector2Int>> ();
-
-	// Use this for initialization
-	void Start ()
-	{
-		//CreatePositionPresets ();
-	}
-
-	void CreatePositionPresets ()
-	{
-		// 1
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			positionPresets.Add (list);
-		}
-		// 2
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (0, -1));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (1, 0));
-			positionPresets.Add (list);
-		}
-		// 3
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (0, -1));
-			list.Add (new Vector2Int (0, -2));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (0, -1));
-			list.Add (new Vector2Int (1, -1));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (0, -1));
-			list.Add (new Vector2Int (1, 0));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (1, 0));
-			list.Add (new Vector2Int (1, -1));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (-1, -1));
-			list.Add (new Vector2Int (0, -1));
-			positionPresets.Add (list);
-		}
-		{
-			var list = new List<Vector2Int> ();
-			list.Add (new Vector2Int (0, 0));
-			list.Add (new Vector2Int (1, 0));
-			list.Add (new Vector2Int (2, 0));
-			positionPresets.Add (list);
-		}
-	}
-
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
-
 	public IEnumerable<Feature> GetFeatures ()
 	{
 		return features;
@@ -127,43 +47,8 @@ public class FeatureManager : MonoBehaviour
 		}
 	}
 
-	public Feature Generate (int size)
-	{
-		var featureObject = Instantiate (featurePrefab.gameObject);
-		var feature = featureObject.GetComponent<Feature> ();
-		Add (feature);
-
-		if (size == 0) {
-			RefreshPositions ();
-			return feature;
-		}
-
-		var presetsOfSize = new List<List<Vector2Int>> ();
-		foreach (var preset in positionPresets) {
-			if (preset.Count == size) {
-				presetsOfSize.Add (preset);
-			}
-		}
-		if (presetsOfSize.Count == 0) {
-			throw new System.Exception (string.Format ("cannot find preset of size {0}", size));
-		}
-			
-		var selectedPreset = presetsOfSize [Random.Range (0, presetsOfSize.Count)];
-		foreach (var position in selectedPreset) {
-			var block = blockGenerator.GenerateBlock ();
-			block.X = position.x;
-			block.Y = position.y;
-			feature.AddBlock (block);
-		}
-			
-		RefreshPositions ();
-		return feature;
-	}
-
 	public Feature Generate2 (int size)
 	{
-		Debug.Log (string.Format ("Generate2({0})", size));
-
 		var featureObject = Instantiate (featurePrefab.gameObject);
 		var feature = featureObject.GetComponent<Feature> ();
 		Add (feature);
@@ -200,7 +85,6 @@ public class FeatureManager : MonoBehaviour
 	static void ExplorePosition (int x, int y, BlockMap closeList, List<Vector2Int> openList)
 	{
 		if (closeList.Get (x, y) == null) {
-			Debug.Log (string.Format ("adding {0} {1} to open list", x, y));
 			openList.Add (new Vector2Int (x, y));
 		}
 	}

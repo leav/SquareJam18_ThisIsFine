@@ -1,1 +1,1 @@
-# SquareJam18_ThisIsFine
+# ThisIsFine

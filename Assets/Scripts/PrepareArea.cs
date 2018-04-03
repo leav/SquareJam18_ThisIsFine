@@ -5,7 +5,8 @@ using UnityEngine;
 public class PrepareArea : MonoBehaviour {
 	List<Block> blockQueue = new List<Block>();
 	const int xOffset = 1;
-	const int yOffset = 0;
+	const int yOffset = -1;
+	const int width = 3;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +35,10 @@ public class PrepareArea : MonoBehaviour {
 		foreach (var block in blockQueue) {
 			block.SetAllPosition(x, y);
 			x += xOffset;
-			y += yOffset;
+			if (x >= width) {
+				x = 0;
+				y += yOffset;
+			}
 		}
 	}
 

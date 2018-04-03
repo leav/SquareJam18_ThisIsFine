@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 public class Controller : MonoBehaviour
 {
@@ -25,11 +26,17 @@ public class Controller : MonoBehaviour
 	[SerializeField]
 	SoundManager soundManager;
 
+	[System.Serializable]
+	public class ListenToInputEvent : UnityEvent<bool>{}
+	[SerializeField]
+	ListenToInputEvent listenToInput = new ListenToInputEvent();
+
 	enum State
 	{
 		Idle,
 		Begun,
-		Inserted
+		Inserted,
+		CoffeeIntake,
 	}
 
 	[SerializeField]
@@ -52,16 +59,29 @@ public class Controller : MonoBehaviour
 	int featureIntervalCount = 0;
 
 	const int maxSLA = 10000;
-	const int onFireSLA = 3000;
+	const int onFireSLA = 0;
 	int sla = maxSLA;
 	int slaRecoverSpeed = 100;
 
 	const int startingMoney = 100;
 	int money = startingMoney;
 
-	const int catchFireChance = 30;
+	const int catchFireChance = 80;
 	const int maxNoFireCount = 10;
 	const int warningDuration = 4;
+
+	const float gameOverTextStartingY = -13;
+	const float gameOverTextEndingY = 0;
+
+	[SerializeField]
+	Coffee coffee;
+	[SerializeField]
+	GameObject coffeeLastEffect;
+	const int coffeeIntakeDuration = 2;
+	int coffeeIntakeCount = 0;
+	const int coffeeLastDuration = 8;
+	int coffeeLastCount = 0;
+	bool coffeeUsedForThisFire = false;
 
 	void Start ()
 	{
@@ -71,6 +91,8 @@ public class Controller : MonoBehaviour
 		for (int i = 0; i < startingPrepareBlocks; i++) {
 			prepareArea.AddBlock (blockGenerator.GenerateBlock ());
 		}
+
+		listenToInput.Invoke (true);
 	}
 
 	// Update is called once per frame
@@ -83,6 +105,9 @@ public class Controller : MonoBehaviour
 		switch (state) {
 		case State.Idle:
 			UpdateIdle ();
+			break;
+		case State.CoffeeIntake:
+			UpdateCoffeeIntake ();
 			break;
 		case State.Begun:
 			UpdateBegun ();
@@ -99,7 +124,13 @@ public class Controller : MonoBehaviour
 
 	bool UpdateGameover ()
 	{
+		if (Input.GetKey(KeyCode.Escape))
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene ("Main");
+			return true;
+		}
 		if (sla == 0 || money == 0) {
+			coffeeLastEffect.SetActive (false);
 			gameoverOverlay.SetActive (true);
 			gameoverText.SetActive (true);
 			if (Input.GetMouseButtonDown (0)) {
@@ -117,12 +148,20 @@ public class Controller : MonoBehaviour
 			var localPostion = prepareArea.transform.InverseTransformPoint (mousePosition);
 			var block = prepareArea.GetBlock (localPostion.x, localPostion.y);
 			if (block != null) {
-				Debug.Log (block);
 				begunBlock = block;
 				prepareArea.RemoveBlock (block);
 				board.AddBlock (block);
 				state = State.Begun;
+			} else if (coffee.IsMouseHit ()) {
+				state = State.CoffeeIntake;
 			}
+		}
+	}
+
+	void UpdateCoffeeIntake() {
+		if (Input.GetMouseButtonUp (0)) {
+			state = State.Idle;
+			coffeeIntakeCount = 0;
 		}
 	}
 
@@ -259,8 +298,9 @@ public class Controller : MonoBehaviour
 
 	void Tick ()
 	{
-		TickFeature ();
 		TickPrepare ();
+		TickCoffee ();
+		TickFeature ();
 		TickFire ();
 		TickSLA ();
 		TickBGM ();
@@ -295,20 +335,26 @@ public class Controller : MonoBehaviour
 		}
 	}
 
+	[SerializeField]
+	AudioSource tadaSound;
 	void TickSLA ()
 	{
 		BlockMap blocks = new BlockMap (board.GetBlocks ());
-		int featureIndex = 0;
 		bool everythingIsFine = true;
 		foreach (var feature in featureManager.GetFeatures()) {
-			if (!feature.IsSatisfied (blocks)) {
-				Debug.Log (string.Format ("not satisfied for feature {0}!", featureIndex));
+			var satisfied = feature.IsSatisfied (blocks, coffeeLastCount > 0);
+			if (!satisfied) {
 				sla -= feature.SLAEffect;
 				everythingIsFine = false;
+				feature.MarkAsUnSatisfied ();
 			} else {
 				money += feature.Income;
+				if (!feature.LastSatisfied) {
+					feature.MarkAsSatisfied ();
+					tadaSound.Play ();
+				}
 			}
-			featureIndex++;
+			feature.LastSatisfied = satisfied;
 		}
 		if (everythingIsFine) {
 			sla += slaRecoverSpeed;
@@ -363,7 +409,51 @@ public class Controller : MonoBehaviour
 				return;
 			}
 		}
-		soundManager.PauseOnFire ();
+		foreach (var block in board.GetBlocks()) {
+			if (block.OnWarning) {
+				soundManager.PlayImminent ();
+				return;
+			}
+		}
+		soundManager.PlayPeaceful ();
+	}
+
+	void TickCoffee() {
+		bool sometingOnFire = false;
+		foreach (var block in board.GetBlocks()) {
+			if (block.OnFire) {
+				sometingOnFire = true;
+				break;
+			}
+		}
+		if (sometingOnFire && !coffeeUsedForThisFire) {
+			coffee.SetActive (true);
+		} 
+		if (!sometingOnFire) {
+			coffeeUsedForThisFire = false;
+		}
+		if (coffeeLastCount > 0) {
+			coffeeLastCount--;
+			if (coffeeLastCount == 0) {
+				coffeeLastEffect.SetActive (false);
+			}
+		}
+		if (state == State.CoffeeIntake) {
+			TickCoffeeIntake ();
+		}
+	}
+
+	void TickCoffeeIntake() {
+		coffeeIntakeCount++;
+		coffee.SetComsumption ((float)coffeeIntakeCount / coffeeIntakeDuration);
+		if (coffeeIntakeCount >= coffeeIntakeDuration) {
+			coffeeLastCount = coffeeLastDuration;
+			tadaSound.Play ();
+			coffeeUsedForThisFire = true;
+			coffee.SetActive(false);
+			coffeeLastEffect.SetActive (true);
+			state = State.Idle;
+		}
 	}
 }
 

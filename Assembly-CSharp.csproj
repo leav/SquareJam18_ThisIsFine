@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Block.cs" />
      <Compile Include="Assets\Scripts\BlockGenerator.cs" />
      <Compile Include="Assets\Scripts\Board.cs" />
+     <Compile Include="Assets\Scripts\Coffee.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\Direction.cs" />
      <Compile Include="Assets\Scripts\Feature.cs" />

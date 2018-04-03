@@ -35,6 +35,8 @@ public class BlockGenerator : MonoBehaviour {
 		default:
 			throw(new Exception (string.Format ("unhandled color {0}", color)));
 		}
-		return blockObject.GetComponent<Block> ();
+		var block = blockObject.GetComponent<Block> ();
+		block.Color = color;
+		return block;
 	}
 }

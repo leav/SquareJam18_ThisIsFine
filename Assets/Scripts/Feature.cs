@@ -7,7 +7,11 @@ using UnityEngine;
 /// Must have a block at 0, 0 unless the requirement is empty.
 /// </summary>
 public class Feature : MonoBehaviour {
-	[SerializeField]
+	public bool LastSatisfied {
+		get;
+		set;
+	}
+		
 	List<Block> blocks = new List<Block>();
 	public int Income {
 		get;
@@ -47,7 +51,7 @@ public class Feature : MonoBehaviour {
 		}
 	}
 
-	public bool IsSatisfied(BlockMap existingBlocks) {
+	public bool IsSatisfied(BlockMap existingBlocks, bool ignoreFire) {
 		if (blocks.Count == 0) {
 			return true;
 		}
@@ -57,7 +61,7 @@ public class Feature : MonoBehaviour {
 				var mappedToBlock = existingBlocks.Get (existing.X + block.X, existing.Y + block.Y);
 				if (mappedToBlock == null ||
 					mappedToBlock.Color != block.Color ||
-					mappedToBlock.OnFire
+					(!ignoreFire && mappedToBlock.OnFire)
 				) {
 					satisfied = false;
 					break;
@@ -98,4 +102,17 @@ public class Feature : MonoBehaviour {
 		return max - min + 1;
 	}
 
+	Color satisfiedColor = new Color(0, 161, 28);
+	Color normalColor = Color.white;
+	public void MarkAsSatisfied() {
+		foreach (var block in blocks) {
+			block.GetComponent<SpriteRenderer> ().color = satisfiedColor;
+		}
+	}
+
+	public void MarkAsUnSatisfied() {
+		foreach (var block in blocks) {
+			block.GetComponent<SpriteRenderer> ().color = normalColor;
+		}
+	}
 }

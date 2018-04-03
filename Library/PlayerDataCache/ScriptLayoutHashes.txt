@@ -1,4 +1,4 @@
-iOS
+OSXStandalone
 SceneListBegin?
 Assets/Main.unity
 SceneListEnd?
@@ -141,9 +141,10 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
 5cfaff52567962bc84c3dade3ad499b8 Assembly-CSharp.dll:.Block
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Board
-0f7cdc6f4d04d619d3451e684f38779d Assembly-CSharp.dll:.Controller
+e227ed6ecef744038487451da0cccbaf Assembly-CSharp.dll:.Controller
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.PrepareArea
 1689692391616e6998261d1fe4bdff81 Assembly-CSharp.dll:.FeatureManager
 93050856303190ab29f2b0a8e802d29c Assembly-CSharp.dll:.BlockGenerator
-b01f901eb52a8c7398c939b700ead473 Assembly-CSharp.dll:.Feature
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Feature
 59fc95dd12b2ae0391cd58f27afb870b Assembly-CSharp.dll:.SoundManager
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Coffee
