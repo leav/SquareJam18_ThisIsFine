@@ -12,7 +12,7 @@ public class Block : MonoBehaviour
 	AudioSource fireSound;
 	[SerializeField]
 	SpriteRenderer spriteRenderer;
-	UnityEngine.Color pushedColor = new UnityEngine.Color(0, 0, 0, 66f / 255);
+	UnityEngine.Color pushedColor = new UnityEngine.Color(200f / 255, 60f / 255, 60f / 255);
 
 	public enum ColorEnum
 	{

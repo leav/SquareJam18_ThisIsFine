@@ -60,4 +60,5 @@ public class Board : MonoBehaviour
 		var radius = size / 2;
 		return (x >= -radius) && (x <= radius) && (y >= -radius) && (y <= radius);
 	}
+
 }
