@@ -34,6 +34,16 @@ public class Board : MonoBehaviour
 		return null;
 	}
 
+	public Block GetDisplayBlock (int x, int y)
+	{
+		foreach (var block in blocks) {
+			if (block.DisplayX == x && block.DisplayY == y) {
+				return block;
+			}
+		}
+		return null;
+	}
+
 	public Block GetBlock (float x, float y)
 	{
 		return GetBlock (Mathf.RoundToInt (x), Mathf.RoundToInt (y));

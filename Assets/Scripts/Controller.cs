@@ -26,16 +26,10 @@ public class Controller : MonoBehaviour
 	[SerializeField]
 	SoundManager soundManager;
 
-	[System.Serializable]
-	public class ListenToInputEvent : UnityEvent<bool>{}
-	[SerializeField]
-	ListenToInputEvent listenToInput = new ListenToInputEvent();
-
 	enum State
 	{
 		Idle,
 		Begun,
-		Inserted,
 		CoffeeIntake,
 	}
 
@@ -74,11 +68,14 @@ public class Controller : MonoBehaviour
 	Coffee coffee;
 	[SerializeField]
 	GameObject coffeeLastEffect;
-	const int coffeeIntakeDuration = 2;
+	const int coffeeIntakeDuration = 1;
 	int coffeeIntakeCount = 0;
 	const int coffeeLastDuration = 8;
 	int coffeeLastCount = 0;
 	bool coffeeUsedForThisFire = false;
+
+
+	Vector2 lastMousePosition, mousePosition;
 
 	void Start ()
 	{
@@ -88,8 +85,6 @@ public class Controller : MonoBehaviour
 		for (int i = 0; i < startingPrepareBlocks; i++) {
 			prepareArea.AddBlock (blockGenerator.GenerateBlock ());
 		}
-
-		listenToInput.Invoke (true);
 	}
 
 	// Update is called once per frame
@@ -98,6 +93,10 @@ public class Controller : MonoBehaviour
 		if (UpdateGameover ()) {
 			return;
 		}
+
+		lastMousePosition = mousePosition;
+		var mousePostionVector3 = board.transform.InverseTransformPoint (Camera.main.ScreenToWorldPoint (Input.mousePosition));
+		mousePosition = new Vector2 (mousePostionVector3.x, mousePostionVector3.y);
 
 		switch (state) {
 		case State.Idle:
@@ -109,9 +108,6 @@ public class Controller : MonoBehaviour
 		case State.Begun:
 			UpdateBegun ();
 			break;
-		case State.Inserted:
-			UpdateInserted ();
-			break;
 		default:
 			throw(new Exception (string.Format ("unhandled state {0}", state)));
 		}
@@ -121,8 +117,7 @@ public class Controller : MonoBehaviour
 
 	bool UpdateGameover ()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
+		if (Input.GetKey (KeyCode.Escape)) {
 			UnityEngine.SceneManagement.SceneManager.LoadScene ("Main");
 			return true;
 		}
@@ -156,7 +151,8 @@ public class Controller : MonoBehaviour
 		}
 	}
 
-	void UpdateCoffeeIntake() {
+	void UpdateCoffeeIntake ()
+	{
 		if (Input.GetMouseButtonUp (0)) {
 			state = State.Idle;
 			coffeeIntakeCount = 0;
@@ -166,89 +162,67 @@ public class Controller : MonoBehaviour
 
 	void UpdateBegun ()
 	{
-		var mousePosition = board.transform.InverseTransformPoint (Camera.main.ScreenToWorldPoint (Input.mousePosition));
-		var x = Mathf.RoundToInt (mousePosition.x);
-		var y = Mathf.RoundToInt (mousePosition.y);
-		insertedBlock = board.GetBlock (x, y);
-		if (insertedBlock != null && insertedBlock != begunBlock) {
-			if (insertedBlock.DisplayX > begunBlock.DisplayX) {
-				insertedDirection = Direction.East;
-			} else if (insertedBlock.DisplayX < begunBlock.DisplayX) {
-				insertedDirection = Direction.West;
-			} else if (insertedBlock.DisplayY > begunBlock.DisplayY) {
-				insertedDirection = Direction.North;
-			} else {
-				insertedDirection = Direction.South;
+		var blockPoses = LineMath.IntegerPoints (lastMousePosition, mousePosition);
+		if (blockPoses.Count > 0) {
+			Vector2Int lastBlockPos = Vector2Int.zero;
+			foreach (var blockPos in blockPoses) {
+				Direction direction = BlockDirection (lastBlockPos, blockPos);
+				int xStep = 0;
+				int yStep = 0;
+				switch (direction) {
+				case Direction.East:
+					xStep = 1;
+					break;
+				case Direction.South:
+					yStep = -1;
+					break;
+				case Direction.West:
+					xStep = -1;
+					break;
+				case Direction.North:
+					yStep = 1;
+					break;
+				}
+				int x = blockPos.x;
+				int y = blockPos.y;
+				List<Block> blocksToMove = new List<Block> ();
+				for (var block = board.GetDisplayBlock (x, y);
+					block != null && block != begunBlock;
+					x += xStep, y += yStep, block = board.GetDisplayBlock (x, y)) {
+					blocksToMove.Add (block);
+				}
+				foreach (var block in blocksToMove) {
+					block.DisplayX += xStep;
+					block.DisplayY += yStep;
+				}
+				lastBlockPos = blockPos;
 			}
-			state = State.Inserted;
-		}
-		begunBlock.DisplayX = x;
-		begunBlock.DisplayY = y;
-
-		if (Input.GetMouseButtonUp (0)) {
-			if (board.WithinBoundary (begunBlock.DisplayX, begunBlock.DisplayY)) {
-				begunBlock.SetAllPosition (begunBlock.DisplayX, begunBlock.DisplayY);
-				soundManager.PlayDrop ();
-			} else {
-				board.RemoveBlock (begunBlock);
-				prepareArea.AddBlock (begunBlock);
+			begunBlock.DisplayX = lastBlockPos.x;
+			begunBlock.DisplayY = lastBlockPos.y;
+			var blockMoved = true;
+			while (blockMoved) {
+				blockMoved = false;
+				foreach (var block in board.GetBlocks()) {
+					if (block != begunBlock) {
+						if (block.DisplayX != block.X) {
+							var dist = block.X - block.DisplayX;
+							var desired = block.DisplayX + dist / Mathf.Abs(dist);
+							if (board.GetDisplayBlock(desired, block.DisplayY) == null) {
+								block.DisplayX = desired;
+								blockMoved = true;
+							}
+						}
+						if (block.DisplayY != block.Y) {
+							var dist = block.Y - block.DisplayY;
+							var desired = block.DisplayY + dist / Mathf.Abs(dist);
+							if (board.GetDisplayBlock(block.DisplayX, desired) == null) {
+								block.DisplayY = desired;
+								blockMoved = true;
+							}
+						}
+					}
+				}
 			}
-			begunBlock = null;
-			state = State.Idle;
-		}
-	}
-
-	void UpdateInserted ()
-	{
-		foreach (Block block in board.GetBlocks()) {
-			if (block != begunBlock) {
-				block.DisplayX = block.X;
-				block.DisplayY = block.Y;
-			}
-		}
-		var mousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		if (insertedDirection == Direction.North || insertedDirection == Direction.South) {
-			begunBlock.DisplayY = Mathf.RoundToInt (mousePosition.y);
-		} else {
-			begunBlock.DisplayX = Mathf.RoundToInt (mousePosition.x);
-		}
-		var x = insertedBlock.X;
-		var y = insertedBlock.Y;
-		int offset = 0, xIncrement = 0, yIncrement = 0;
-		switch (insertedDirection) {
-		case Direction.East:
-			offset = begunBlock.DisplayX - insertedBlock.X + 1;
-			xIncrement = 1;
-			break;
-		case Direction.South:
-			offset = insertedBlock.Y - begunBlock.DisplayY + 1;
-			yIncrement = -1;
-			break;
-		case Direction.West:
-			offset = insertedBlock.X - begunBlock.DisplayX + 1;
-			xIncrement = -1;
-			break;
-		case Direction.North:
-			offset = begunBlock.DisplayY - insertedBlock.Y + 1;
-			yIncrement = 1;
-			break;
-		default:
-			throw new Exception ("unhandled direction");
-		}
-		if (offset <= 0) {
-			state = State.Begun;
-			return;
-		}
-		while (offset > 0) {
-			var block = board.GetBlock (x, y);
-			if (block == null) {
-				offset--;
-			} else {
-				block.DisplayX = block.X + xIncrement * offset;
-				block.DisplayY = block.Y + yIncrement * offset;
-			}
-			x += xIncrement;
-			y += yIncrement;
 		}
 
 		if (Input.GetMouseButtonUp (0)) {
@@ -285,7 +259,21 @@ public class Controller : MonoBehaviour
 		}
 	}
 
-	void UpdateBlockPushedColor() {
+	Direction BlockDirection (Vector2Int a, Vector2Int b)
+	{
+		if (b.y > a.y) {
+			return Direction.North;
+		} else if (b.y < a.y) {
+			return Direction.South;
+		} else if (b.x < a.x) {
+			return Direction.West;
+		} else {
+			return Direction.East;
+		}
+	}
+
+	void UpdateBlockPushedColor ()
+	{
 		foreach (var block in board.GetBlocks()) {
 			if (block != begunBlock) {
 				if (block.DisplayX != block.X || block.DisplayY != block.Y) {
@@ -350,6 +338,7 @@ public class Controller : MonoBehaviour
 
 	[SerializeField]
 	AudioSource tadaSound;
+
 	void TickSLA ()
 	{
 		BlockMap blocks = new BlockMap (board.GetBlocks ());
@@ -431,7 +420,8 @@ public class Controller : MonoBehaviour
 		soundManager.PlayPeaceful ();
 	}
 
-	void TickCoffee() {
+	void TickCoffee ()
+	{
 		bool sometingOnFire = false;
 		foreach (var block in board.GetBlocks()) {
 			if (block.OnFire) {
@@ -456,14 +446,15 @@ public class Controller : MonoBehaviour
 		}
 	}
 
-	void TickCoffeeIntake() {
+	void TickCoffeeIntake ()
+	{
 		coffeeIntakeCount++;
 		coffee.SetComsumption ((float)coffeeIntakeCount / coffeeIntakeDuration);
 		if (coffeeIntakeCount >= coffeeIntakeDuration) {
 			coffeeLastCount = coffeeLastDuration;
 			tadaSound.Play ();
 			coffeeUsedForThisFire = true;
-			coffee.SetActive(false);
+			coffee.SetActive (false);
 			coffee.SetComsumption (0);
 			coffeeLastEffect.SetActive (true);
 			state = State.Idle;
