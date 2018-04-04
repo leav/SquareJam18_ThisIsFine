@@ -83,8 +83,35 @@ public class Controller : MonoBehaviour
 			GenerateFeature ();
 		}
 		for (int i = 0; i < startingPrepareBlocks; i++) {
-			prepareArea.AddBlock (blockGenerator.GenerateBlock ());
+			GeneratePrepareAreaBlock ();
 		}
+	}
+
+	void GeneratePrepareAreaBlock ()
+	{
+		Dictionary<Block.ColorEnum, int> colorCount = new Dictionary<Block.ColorEnum, int> ();
+		colorCount [Block.ColorEnum.Black] = 0;
+		colorCount [Block.ColorEnum.White] = 0;
+		foreach (var feature in featureManager.GetFeatures()) {
+			foreach (var featureBlock in feature.GetBlocks()) {
+				colorCount [featureBlock.Color]++;
+			}
+		}
+		foreach (var prepareBlock in prepareArea.GetBlocks()) {
+			colorCount [prepareBlock.Color]--;
+		}
+		List<Block.ColorEnum> roulette = new List<Block.ColorEnum> ();
+		foreach (var key in colorCount.Keys) {
+			var count = colorCount [key];
+			if (count <= 0) {
+				count = 1;
+			}
+			for (int i = 0; i < count; i++) {
+				roulette.Add (key);
+			}
+		}
+		var color = roulette [UnityEngine.Random.Range (0, roulette.Count)];
+		prepareArea.AddBlock (blockGenerator.GenerateBlock (color));
 	}
 
 	// Update is called once per frame
@@ -206,16 +233,16 @@ public class Controller : MonoBehaviour
 					if (block != begunBlock) {
 						if (block.DisplayX != block.X) {
 							var dist = block.X - block.DisplayX;
-							var desired = block.DisplayX + dist / Mathf.Abs(dist);
-							if (board.GetDisplayBlock(desired, block.DisplayY) == null) {
+							var desired = block.DisplayX + dist / Mathf.Abs (dist);
+							if (board.GetDisplayBlock (desired, block.DisplayY) == null) {
 								block.DisplayX = desired;
 								blockMoved = true;
 							}
 						}
 						if (block.DisplayY != block.Y) {
 							var dist = block.Y - block.DisplayY;
-							var desired = block.DisplayY + dist / Mathf.Abs(dist);
-							if (board.GetDisplayBlock(block.DisplayX, desired) == null) {
+							var desired = block.DisplayY + dist / Mathf.Abs (dist);
+							if (board.GetDisplayBlock (block.DisplayX, desired) == null) {
 								block.DisplayY = desired;
 								blockMoved = true;
 							}
@@ -330,8 +357,12 @@ public class Controller : MonoBehaviour
 		prepareBlockCount++;
 		if (prepareBlockCount >= prepareBlockInterval) {
 			prepareBlockCount = 0;
-			if (prepareArea.Count () <= maxPrepareBlocks) {
-				prepareArea.AddBlock (blockGenerator.GenerateBlock ());
+			var blockCount = prepareArea.Count ();
+			if (begunBlock != null) {
+				prepareBlockCount++;
+			}
+			if (blockCount <= maxPrepareBlocks) {
+				GeneratePrepareAreaBlock ();
 			}
 		}
 	}

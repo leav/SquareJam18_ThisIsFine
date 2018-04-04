@@ -55,6 +55,10 @@ public class PrepareArea : MonoBehaviour {
 		return GetBlock (Mathf.RoundToInt (x), Mathf.RoundToInt (y));
 	}
 
+	public ICollection<Block> GetBlocks() {
+		return blockQueue;
+	}
+
 	public int Count() {
 		return blockQueue.Count;
 	}
