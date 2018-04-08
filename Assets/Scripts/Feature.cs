@@ -6,27 +6,32 @@ using UnityEngine;
 /// Requirement.
 /// Must have a block at 0, 0 unless the requirement is empty.
 /// </summary>
-public class Feature : MonoBehaviour {
+public class Feature : MonoBehaviour
+{
 	public bool LastSatisfied {
 		get;
 		set;
 	}
-		
-	List<Block> blocks = new List<Block>();
+
+	List<Block> blocks = new List<Block> ();
+
 	public int Income {
 		get;
 		set;
 	}
+
 	public int SLAEffect {
 		get;
 		set;
 	}
 
-	public IEnumerable<Block> GetBlocks() {
+	public IEnumerable<Block> GetBlocks ()
+	{
 		return blocks;
 	}
 
-	public void AddBlock(Block block) {
+	public void AddBlock (Block block)
+	{
 		block.transform.SetParent (this.transform);
 		block.DisplayX = block.X;
 		block.DisplayY = block.Y;
@@ -34,7 +39,8 @@ public class Feature : MonoBehaviour {
 		RefreshPositions ();
 	}
 
-	void RefreshPositions() {
+	void RefreshPositions ()
+	{
 		int minX = 0;
 		int maxY = 0;
 		foreach (var block in blocks) {
@@ -51,7 +57,8 @@ public class Feature : MonoBehaviour {
 		}
 	}
 
-	public bool CheckSatisfied(BlockMap existingBlocks, bool ignoreFire) {
+	public bool CheckSatisfied (BlockMap existingBlocks)
+	{
 		if (blocks.Count == 0) {
 			return true;
 		}
@@ -61,9 +68,8 @@ public class Feature : MonoBehaviour {
 			foreach (var block in blocks) {
 				var mappedToBlock = existingBlocks.Get (existing.X + block.X, existing.Y + block.Y);
 				if (mappedToBlock == null ||
-					mappedToBlock.Color != block.Color ||
-					(!ignoreFire && mappedToBlock.OnFire)
-				) {
+				    mappedToBlock.Color != block.Color ||
+				    mappedToBlock.OnFire) {
 					satisfied = false;
 					break;
 				}
@@ -79,7 +85,8 @@ public class Feature : MonoBehaviour {
 		return result;
 	}
 
-	public int Width() {
+	public int Width ()
+	{
 		int min = 0;
 		int max = 0;
 		foreach (var block in blocks) {
@@ -93,7 +100,8 @@ public class Feature : MonoBehaviour {
 		return max - min + 1;
 	}
 
-	public int Height() {
+	public int Height ()
+	{
 		int min = 0;
 		int max = 0;
 		foreach (var block in blocks) {
@@ -107,13 +115,15 @@ public class Feature : MonoBehaviour {
 		return max - min + 1;
 	}
 
-	public void MarkAsSatisfied() {
+	public void MarkAsSatisfied ()
+	{
 		foreach (var block in blocks) {
 			block.Satisfied = true;
 		}
 	}
 
-	public void MarkAsUnSatisfied() {
+	public void MarkAsUnSatisfied ()
+	{
 		foreach (var block in blocks) {
 			block.Satisfied = false;
 		}

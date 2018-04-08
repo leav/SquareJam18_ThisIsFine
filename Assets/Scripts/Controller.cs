@@ -68,8 +68,6 @@ public class Controller : MonoBehaviour
 	Coffee coffee;
 	[SerializeField]
 	GameObject coffeeLastEffect;
-	const int coffeeIntakeDuration = 1;
-	int coffeeIntakeCount = 0;
 	const int coffeeLastDuration = 8;
 	int coffeeLastCount = 0;
 	bool coffeeUsedForThisFire = false;
@@ -173,7 +171,7 @@ public class Controller : MonoBehaviour
 				soundManager.PlayPickup ();
 				state = State.Begun;
 			} else if (coffee.IsMouseHit ()) {
-				state = State.CoffeeIntake;
+				IntakeCoffee ();
 			}
 		}
 	}
@@ -182,7 +180,6 @@ public class Controller : MonoBehaviour
 	{
 		if (Input.GetMouseButtonUp (0)) {
 			state = State.Idle;
-			coffeeIntakeCount = 0;
 			coffee.SetComsumption (0);
 		}
 	}
@@ -378,7 +375,7 @@ public class Controller : MonoBehaviour
 		BlockMap blocks = new BlockMap (board.GetBlocks ());
 		bool everythingIsFine = true;
 		foreach (var feature in featureManager.GetFeatures()) {
-			var satisfied = feature.CheckSatisfied (blocks, coffeeLastCount > 0);
+			var satisfied = feature.CheckSatisfied (blocks);
 			if (!satisfied) {
 				sla -= feature.SLAEffect;
 				everythingIsFine = false;
@@ -418,7 +415,7 @@ public class Controller : MonoBehaviour
 			}
 			if (block.OnWarning) {
 				block.OnWarningCount++;
-				if (block.OnWarningCount > warningDuration) {
+				if (block.OnWarningCount > warningDuration && !IsCoffeeActive()) {
 					block.OnWarning = false;
 					block.OnFire = true;
 				}
@@ -466,7 +463,14 @@ public class Controller : MonoBehaviour
 		if (sometingOnFire && !coffeeUsedForThisFire) {
 			coffee.SetActive (true);
 		} 
-		if (!sometingOnFire) {
+		bool sometingOnWarning = false;
+		foreach (var block in board.GetBlocks()) {
+			if (block.OnWarning || block.OnFire) {
+				sometingOnWarning = true;
+				break;
+			}
+		}
+		if (!sometingOnWarning) {
 			coffeeUsedForThisFire = false;
 		}
 		if (coffeeLastCount > 0) {
@@ -475,24 +479,27 @@ public class Controller : MonoBehaviour
 				coffeeLastEffect.SetActive (false);
 			}
 		}
-		if (state == State.CoffeeIntake) {
-			TickCoffeeIntake ();
+//		if (state == State.CoffeeIntake) {
+//			TickCoffeeIntake ();
+//		}
+	}
+
+	void IntakeCoffee() {
+		coffeeLastCount = coffeeLastDuration;
+		tadaSound.Play ();
+		coffeeUsedForThisFire = true;
+		coffee.SetActive (false);
+		coffeeLastEffect.SetActive (true);
+		foreach (var block in board.GetBlocks()) {
+			if (block.OnFire) {
+				block.OnFire = false;
+				block.OnWarning = true;
+			}
 		}
 	}
 
-	void TickCoffeeIntake ()
-	{
-		coffeeIntakeCount++;
-		coffee.SetComsumption ((float)coffeeIntakeCount / coffeeIntakeDuration);
-		if (coffeeIntakeCount >= coffeeIntakeDuration) {
-			coffeeLastCount = coffeeLastDuration;
-			tadaSound.Play ();
-			coffeeUsedForThisFire = true;
-			coffee.SetActive (false);
-			coffee.SetComsumption (0);
-			coffeeLastEffect.SetActive (true);
-			state = State.Idle;
-		}
+	bool IsCoffeeActive() {
+		return coffeeLastCount > 0;
 	}
 }
 
