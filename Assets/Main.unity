@@ -773,6 +773,7 @@ GameObject:
   - component: {fileID: 214339934}
   - component: {fileID: 214339936}
   - component: {fileID: 214339935}
+  - component: {fileID: 214339937}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -824,7 +825,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -854,6 +855,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &214339937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 214339933}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _glowColor: {r: 1, g: 1, b: 1, a: 1}
+  _glowBrightness: 1.44
+  _outlineWidth: 1
+  _alphaThreshold: 0.122
+  _drawOutside: 0
+  _enableInstancing: 0
 --- !u!1 &246273500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,6 +1301,7 @@ GameObject:
   - component: {fileID: 446615371}
   - component: {fileID: 446615373}
   - component: {fileID: 446615372}
+  - component: {fileID: 446615374}
   m_Layer: 0
   m_Name: Block (1)
   m_TagString: Untagged
@@ -1334,7 +1353,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1364,6 +1383,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &446615374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 446615370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _glowColor: {r: 1, g: 1, b: 1, a: 1}
+  _glowBrightness: 2
+  _outlineWidth: 1
+  _alphaThreshold: 0.01
+  _drawOutside: 0
+  _enableInstancing: 0
 --- !u!1 &457926684
 GameObject:
   m_ObjectHideFlags: 0
@@ -4753,7 +4789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1624177425
 Transform:
   m_ObjectHideFlags: 0
@@ -4818,11 +4854,11 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
+  m_HDR: 0
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!4 &1627625094

@@ -102,17 +102,15 @@ public class Feature : MonoBehaviour {
 		return max - min + 1;
 	}
 
-	Color satisfiedColor = new Color(0, 161f / 255, 28f / 255);
-	Color normalColor = Color.white;
 	public void MarkAsSatisfied() {
 		foreach (var block in blocks) {
-			block.GetComponent<SpriteRenderer> ().color = satisfiedColor;
+			block.Satisfied = true;
 		}
 	}
 
 	public void MarkAsUnSatisfied() {
 		foreach (var block in blocks) {
-			block.GetComponent<SpriteRenderer> ().color = normalColor;
+			block.Satisfied = false;
 		}
 	}
 }
