@@ -372,10 +372,13 @@ public class Controller : MonoBehaviour
 
 	void TickSLA ()
 	{
+		foreach (var block in board.GetBlocks()) {
+			block.Satisfied = false;
+		}
 		BlockMap blocks = new BlockMap (board.GetBlocks ());
 		bool everythingIsFine = true;
 		foreach (var feature in featureManager.GetFeatures()) {
-			var satisfied = feature.IsSatisfied (blocks, coffeeLastCount > 0);
+			var satisfied = feature.CheckSatisfied (blocks, coffeeLastCount > 0);
 			if (!satisfied) {
 				sla -= feature.SLAEffect;
 				everythingIsFine = false;

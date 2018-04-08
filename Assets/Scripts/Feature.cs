@@ -51,10 +51,11 @@ public class Feature : MonoBehaviour {
 		}
 	}
 
-	public bool IsSatisfied(BlockMap existingBlocks, bool ignoreFire) {
+	public bool CheckSatisfied(BlockMap existingBlocks, bool ignoreFire) {
 		if (blocks.Count == 0) {
 			return true;
 		}
+		bool result = false;
 		foreach (var existing in existingBlocks) {
 			bool satisfied = true;
 			foreach (var block in blocks) {
@@ -68,10 +69,14 @@ public class Feature : MonoBehaviour {
 				}
 			}
 			if (satisfied) {
-				return true;
+				result = true;
+				foreach (var block in blocks) {
+					var mappedToBlock = existingBlocks.Get (existing.X + block.X, existing.Y + block.Y);
+					mappedToBlock.Satisfied = true;
+				}
 			}
 		}
-		return false;
+		return result;
 	}
 
 	public int Width() {

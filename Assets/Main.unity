@@ -160,6 +160,8 @@ MonoBehaviour:
   warning: {fileID: 1712489227}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &13755858
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -646,6 +648,8 @@ MonoBehaviour:
   warning: {fileID: 301619725}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &174095794
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -741,7 +745,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a4fec0f90b0e1422ba3f66feffdad111, type: 3}
-  m_Color: {r: 0.6102941, g: 0.4419371, b: 0, a: 0.397}
+  m_Color: {r: 0.6102941, g: 0.4419371, b: 0, a: 0.2509804}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -773,7 +777,6 @@ GameObject:
   - component: {fileID: 214339934}
   - component: {fileID: 214339936}
   - component: {fileID: 214339935}
-  - component: {fileID: 214339937}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -811,6 +814,8 @@ MonoBehaviour:
   warning: {fileID: 629847683}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &214339936
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -825,7 +830,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -855,23 +860,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!114 &214339937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 214339933}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _glowColor: {r: 1, g: 1, b: 1, a: 1}
-  _glowBrightness: 1.44
-  _outlineWidth: 1
-  _alphaThreshold: 0.122
-  _drawOutside: 0
-  _enableInstancing: 0
 --- !u!1 &246273500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,7 +1257,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a4fec0f90b0e1422ba3f66feffdad111, type: 3}
-  m_Color: {r: 0.9558824, g: 0.42171282, b: 0.42171282, a: 0.397}
+  m_Color: {r: 0.8509804, g: 0.1882353, b: 0.12941177, a: 0.2509804}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1301,7 +1289,6 @@ GameObject:
   - component: {fileID: 446615371}
   - component: {fileID: 446615373}
   - component: {fileID: 446615372}
-  - component: {fileID: 446615374}
   m_Layer: 0
   m_Name: Block (1)
   m_TagString: Untagged
@@ -1339,6 +1326,8 @@ MonoBehaviour:
   warning: {fileID: 475599397}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &446615373
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1353,7 +1342,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1383,23 +1372,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!114 &446615374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 446615370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _glowColor: {r: 1, g: 1, b: 1, a: 1}
-  _glowBrightness: 2
-  _outlineWidth: 1
-  _alphaThreshold: 0.01
-  _drawOutside: 0
-  _enableInstancing: 0
 --- !u!1 &457926684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1656,8 @@ MonoBehaviour:
   warning: {fileID: 246273500}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &493657867
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1719,7 +1693,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c08bdd28cf9164d638ac8b11b413d748, type: 3}
-  m_Color: {r: 0, g: 0.63235295, b: 0.109026395, a: 1}
+  m_Color: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2013,6 +1987,8 @@ MonoBehaviour:
   warning: {fileID: 466486196}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &652644235
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2536,6 +2512,8 @@ MonoBehaviour:
   warning: {fileID: 93327025}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &834919051
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2718,6 +2696,8 @@ MonoBehaviour:
   warning: {fileID: 952583194}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &870418766
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3100,6 +3080,8 @@ MonoBehaviour:
   warning: {fileID: 173373974}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &969859421
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3411,6 +3393,8 @@ MonoBehaviour:
   warning: {fileID: 1779324146}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &1114552139
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3932,6 +3916,8 @@ MonoBehaviour:
   warning: {fileID: 1326497461}
   fireSound: {fileID: 1599781587}
   spriteRenderer: {fileID: 1316189916}
+  pushedColor: {r: 1, g: 0.8352941, b: 0, a: 1}
+  satisfiedColor: {r: 0.14117648, g: 0.7019608, b: 0.14117648, a: 1}
 --- !u!212 &1316189916
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4121,6 +4107,8 @@ MonoBehaviour:
   warning: {fileID: 1399220686}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &1353824208
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4156,7 +4144,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0e369527e23da4039be818156450a538, type: 3}
-  m_Color: {r: 0, g: 0.72794116, b: 0.06526368, a: 1}
+  m_Color: {r: 0.5294118, g: 1, b: 0.6112532, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4789,7 +4777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1624177425
 Transform:
   m_ObjectHideFlags: 0
@@ -5723,6 +5711,8 @@ MonoBehaviour:
   warning: {fileID: 1886586373}
   fireSound: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  pushedColor: {r: 0.78431374, g: 0.23529412, b: 0.23529412, a: 1}
+  satisfiedColor: {r: 0.52156866, g: 1, b: 0.6117647, a: 1}
 --- !u!212 &2013662904
 SpriteRenderer:
   m_ObjectHideFlags: 0
