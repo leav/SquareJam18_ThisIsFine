@@ -1,6 +1,6 @@
 # This is Fine
 
-Play on the web: https://leav.github.io/SquareJam18_ThisIsFine/
+Play on the web (please be patient for the game to load): https://leav.github.io/SquareJam18_ThisIsFine/
 
 Download from one of the builds: https://github.com/leav/SquareJam18_ThisIsFine/releases/latest
 
