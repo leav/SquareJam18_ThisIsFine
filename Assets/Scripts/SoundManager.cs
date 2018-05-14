@@ -52,4 +52,16 @@ public class SoundManager : MonoBehaviour {
 	public void PlayDrop() {
 		drop.Play ();
 	}
+
+	public void Pause() {
+		peaceful.Pause ();
+		imminent.Pause ();
+		onFire.Pause ();
+	}
+
+	public void UnPause() {
+		peaceful.UnPause ();
+		imminent.UnPause ();
+		onFire.UnPause ();
+	}
 }

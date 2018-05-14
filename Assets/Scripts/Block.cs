@@ -16,6 +16,8 @@ public class Block : MonoBehaviour
 	UnityEngine.Color pushedColor;
 	[SerializeField]
 	UnityEngine.Color satisfiedColor;
+	[SerializeField]
+	UnityEngine.Color betaColor;
 	UnityEngine.Color normalColor = UnityEngine.Color.white;
 
 	public enum ColorEnum
@@ -114,18 +116,8 @@ public class Block : MonoBehaviour
 	public bool Pushed {
 		get { return _pushed; }
 		set {
-			if (_pushed != value) {
-				if (value) {
-					spriteRenderer.color = pushedColor;
-				} else {
-					if (_satisfied) {
-						spriteRenderer.color = satisfiedColor;
-					} else {
-						spriteRenderer.color = normalColor;
-					}
-				}
-			}
 			_pushed = value;
+			RefreshColor ();
 		}
 	}
 
@@ -134,14 +126,29 @@ public class Block : MonoBehaviour
 	public bool Satisfied {
 		get { return _satisfied; }
 		set {
-			if (!_pushed && _satisfied != value) {
-				if (value) {
-					spriteRenderer.color = satisfiedColor;
-				} else {
-					spriteRenderer.color = normalColor;
-				}
-			}
 			_satisfied = value;
+			RefreshColor ();
+		}
+	}
+
+	bool _beta = false;
+	public bool Beta {
+		get { return _beta; }
+		set { 
+			_beta = value;
+			RefreshColor ();
+		}
+	}
+
+	void RefreshColor() {
+		if (_pushed) {
+			spriteRenderer.color = pushedColor;
+		} else if (_satisfied) {
+			spriteRenderer.color = satisfiedColor;
+		} else if (_beta) {
+			spriteRenderer.color = betaColor;
+		} else {
+			spriteRenderer.color = normalColor;
 		}
 	}
 

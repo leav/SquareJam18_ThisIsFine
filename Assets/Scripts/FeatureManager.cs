@@ -17,8 +17,15 @@ public class FeatureManager : MonoBehaviour
 
 	void Add (Feature feature)
 	{
+		foreach (var f in features) {
+			f.Beta = false;
+		}
+		feature.Beta = true;
+
 		features.Add (feature);
 		feature.transform.SetParent (this.transform);
+
+		RefreshPositions ();
 	}
 
 	public void Pop() {
@@ -40,7 +47,8 @@ public class FeatureManager : MonoBehaviour
 	public void RefreshPositions ()
 	{
 		var position = new Vector3 ();
-		foreach (var feature in features) {
+		for (int i = features.Count - 1; i >= 0; i--) {
+			var feature = features [i];
 			feature.transform.localScale = Vector3.one;
 			feature.transform.localPosition = position;
 			position.x += feature.Width () + padding;
@@ -51,7 +59,6 @@ public class FeatureManager : MonoBehaviour
 	{
 		var featureObject = Instantiate (featurePrefab.gameObject);
 		var feature = featureObject.GetComponent<Feature> ();
-		Add (feature);
 		List<Vector2Int> openList = new List<Vector2Int> ();
 		openList.Add (Vector2Int.zero);
 		BlockMap closeList = new BlockMap ();
@@ -73,12 +80,12 @@ public class FeatureManager : MonoBehaviour
 			ExplorePosition (position.x, position.y - 1, closeList, openList);
 			count--;
 		}
-		RefreshPositions ();
 		feature.Income = 0;
 		for (int i = 1; i <= size; i++) {
 			feature.Income += size;
 		}
 		feature.SLAEffect = 100;
+		Add (feature);
 		return feature;
 	}
 

@@ -72,8 +72,10 @@ public class Controller : MonoBehaviour
 	int coffeeLastCount = 0;
 	bool coffeeUsedForThisFire = false;
 
-
 	Vector2 lastMousePosition, mousePosition;
+
+	[SerializeField]
+	Tutorial tutorial;
 
 	void Start ()
 	{
@@ -83,6 +85,7 @@ public class Controller : MonoBehaviour
 		for (int i = 0; i < startingPrepareBlocks; i++) {
 			GeneratePrepareAreaBlock ();
 		}
+		tutorial.enabled = true;
 	}
 
 	void GeneratePrepareAreaBlock ()
@@ -116,6 +119,9 @@ public class Controller : MonoBehaviour
 	void Update ()
 	{
 		if (UpdateGameover ()) {
+			return;
+		}
+		if (UpdateTutorial ()) {
 			return;
 		}
 
@@ -156,6 +162,17 @@ public class Controller : MonoBehaviour
 			return true;
 		}
 		return false;
+	}
+
+
+	bool UpdateTutorial() {
+		bool result = tutorial.isActiveAndEnabled;
+		if (result) {
+			soundManager.Pause();
+		} else {
+			soundManager.UnPause ();
+		}
+		return result;
 	}
 
 	void UpdateIdle ()
@@ -377,10 +394,15 @@ public class Controller : MonoBehaviour
 		foreach (var feature in featureManager.GetFeatures()) {
 			var satisfied = feature.CheckSatisfied (blocks);
 			if (!satisfied) {
-				sla -= feature.SLAEffect;
-				everythingIsFine = false;
+				if (!feature.Beta) {
+					sla -= feature.SLAEffect;
+					everythingIsFine = false;
+				}
 				feature.MarkAsUnSatisfied ();
 			} else {
+				if (feature.Beta) {
+					feature.Beta = false;
+				}
 				money += feature.Income;
 				if (!feature.LastSatisfied) {
 					feature.MarkAsSatisfied ();

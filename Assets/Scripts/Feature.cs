@@ -25,6 +25,21 @@ public class Feature : MonoBehaviour
 		set;
 	}
 
+	[SerializeField]
+	GameObject betaTag;
+
+	private bool _beta;
+	public bool Beta {
+		get { return _beta;}
+		set {
+			_beta = value;
+			foreach (var block in blocks) {
+				block.Beta = value;
+			}
+			betaTag.SetActive (value);
+		}
+	}
+
 	public IEnumerable<Block> GetBlocks ()
 	{
 		return blocks;
