@@ -1,10 +1,10 @@
 # This is Fine
 
-Play on the web (please be patient for the game to load): https://leav.github.io/SquareJam18_ThisIsFine/
+## [Play on the web](https://leav.github.io/SquareJam18_ThisIsFine/)
 
-Download from one of the builds: https://github.com/leav/SquareJam18_ThisIsFine/releases/latest
+## [Download mobile build](https://github.com/leav/SquareJam18_ThisIsFine/releases/latest)
 
-`This is Fine` is a puzzle game simulating the frantic experience of an on-call engineer coping with fires.  Your goal is to push blocks of code to maintain SLA so Square can continue to make bank.  Coffee is your only best friend during these long hours.  Use it wisely.
+`This is Fine` is a puzzle game simulating the frantic experience of an on-call engineer coping with fires. Your goal is to push blocks of code to maintain SLA so Square can continue to make bank.  Coffee is your only best friend during these long hours.  Use it wisely.
 
 ![Screenshot](/Screenshots/screenshot1_s.png)
 
