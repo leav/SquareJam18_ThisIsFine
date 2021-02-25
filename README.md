@@ -14,12 +14,7 @@ A game by Brian Wang, Oliver Liao, Song Ye for Square Game Jam 2018 themed "Squa
 
 ### Publish web build
 
-1. Build it in Unity and output to Builds/Web.
-2. In the root project directory, `git subtree push --prefix Builds/Web/ThisIsFine origin gh-pages` 
-
-#### In case of a rebased master
-
-    git push origin `git subtree split --prefix builds/Web/ThisIsFine master`:gh-pages --force
+1. Build it in Unity and output to ./docs/
 
 ### Publish Android and iOS build
 
